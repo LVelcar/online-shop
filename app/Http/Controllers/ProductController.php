@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers; 
+namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -25,69 +26,40 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $rules = [
-            'title' => ['required', 'max:255'],
-            'description' => ['required', 'max:1000'],
-            'price' => ['required', 'numeric', 'min:1'],
-            'stock' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'in:available,unavailable']
-        ];
-
-        request()->validate($rules);
-
-        if (request()->status == 'available' && request()->stock == 0) {
-            return redirect()
-                    ->back()
-                    ->withInput(request()->all())
-                    ->withErrors('If available, stock must be greater than 0');
-        }
-
         session()->forget('error');
 
-        $product = Product::create($request->all());
+        $product = Product::create($request->validated());
         
         return redirect()
                 ->route('products')
                 ->withSuccess("Product with ID {$product->id} created successfully");
     }
 
-    public function show($product)
+    public function show(Product $product)
     {
-        $product = Product::findOrFail($product);
+        // $product = Product::findOrFail($product);
 
         return view('products.show', ['product' => $product]);
     }
 
-    public function edit($product)
+    public function edit(Product $product)
     {
-        return view('products.edit', ['product' => Product::findOrFail($product)]);
+        return view('products.edit', ['product' => $product]);
     }
 
-    public function update($product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $rules = [
-            'title' => ['required', 'max:255'],
-            'description' => ['required', 'max:1000'],
-            'price' => ['required', 'numeric', 'min:1'],
-            'stock' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'in:available,unavailable']
-        ];
-
-        request()->validate($rules);
-
-        $product = Product::findOrFail($product);
-        $product->update(request()->all());
+        $product->update($request->validated());
 
         return redirect()
                 ->route('products')
                 ->withSuccess("Product with ID {$product->id} updated successfully");
     }
     
-    public function destroy($product)
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($product);
         $product->delete();
 
         return redirect()

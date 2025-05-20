@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="content">
+    <div class="content container fluid">
         <h1>Create Product</h1>
 
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
@@ -22,7 +22,7 @@
                 <label for="stock">Stock</label>
                 <input type="number" name="stock" id="stock" class="form-control" min="0" value="{{ old('stock')}}">
             </div>  
-            <div class="form-row">
+            <div class="form-row mt-2 mb-2">
                 <label for="status">Status</label>
                 <select name="status" id="status" class="custom-select">
                     <option value="" selected>Select..</option>

@@ -1,8 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="content">
+    <div class="content container ">
         <h1>Welcome to the Product Management System</h1>
-        <p>This is a simple application to manage products.</p>
+        @empty($products)
+            <div class="alerr alert-danger">
+                <h2>No products available</h2>
+                <p>Please add some products to the system.</p>
+            </div>
+        @else
+            <div class="row mb-3 container mt-3">
+                @foreach ($products as $product)
+                    <div class="col-3 mb-3 mt-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $product->name }}</h5>
+                                <p class="card-text">Price: ${{ $product->price }}</p>
+                                <p class="card-text">Description: {{ $product->description }}</p>
+                                <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 @endsection
