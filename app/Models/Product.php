@@ -17,4 +17,16 @@ class Product extends Model
         'stock',
         'status',
     ];
+
+    public function carts(){
+        return $this->belongsToMany(Cart::class, 'car_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
+
+    public function orders(){
+        return $this->belongsToMany(Order::class, 'order_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
 }

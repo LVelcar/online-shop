@@ -4,7 +4,7 @@
     <div class="content container ">
         <h1>Welcome to the Product Management System</h1>
         @empty($products)
-            <div class="alerr alert-danger">
+            <div class="alert alert-danger">
                 <h2>No products available</h2>
                 <p>Please add some products to the system.</p>
             </div>
@@ -13,10 +13,8 @@
                 @foreach ($products as $product)
                     <div class="col-3 mb-3 mt-2">
                         <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ $product->name }}</h5>
-                                <p class="card-text">Price: ${{ $product->price }}</p>
-                                <p class="card-text">Description: {{ $product->description }}</p>
+                            @include('components.product-card')
+                            <div class="details container mb-3 align-items-center">
                                 <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">View Details</a>
                             </div>
                         </div>

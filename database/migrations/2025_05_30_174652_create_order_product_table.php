@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->float('amount')->unisigned();
-            $table->timestamp('payed_at')->nullable();
+        Schema::create('order_product', function (Blueprint $table) {
             $table->bigInteger('order_id')->unsigned();
-            $table->timestamps();
+            $table->bigInteger('product_id')->unsigned();
+            $table->integer('quantity')->unsigned();
 
-            
             $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('order_product');
     }
 };
