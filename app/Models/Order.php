@@ -17,7 +17,7 @@ class Order extends Model
         'customer_id',
     ];
 
-    public function payments() {
+    public function payment() {
         return $this->hasOne(Payment::class);
     }
 
