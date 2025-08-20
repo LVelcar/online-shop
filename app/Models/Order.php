@@ -26,7 +26,7 @@ class Order extends Model
     }
 
     public function products() {
-        return $this->belongsToMany(Product::class, 'order_product')
+        return $this->morphToMany(Product::class, 'productable')
                     ->withPivot('quantity')
                     ->withTimestamps();
     }

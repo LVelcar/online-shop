@@ -19,14 +19,18 @@ class Product extends Model
     ];
 
     public function carts(){
-        return $this->belongsToMany(Cart::class, 'car_product')
+        return $this->morphedByMany(Cart::class,'productable')
                     ->withPivot('quantity')
                     ->withTimestamps();
     }
 
     public function orders(){
-        return $this->belongsToMany(Order::class, 'order_product')
+        return $this->morphedByMany(Order::class, 'productable')
                     ->withPivot('quantity')
                     ->withTimestamps();
+    }
+
+    public function images() {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }
