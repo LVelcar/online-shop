@@ -16,11 +16,11 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
-        // Imágenes de productos con nombre único
-        $fileName = uniqid() . '.jpg';
+        // Productos: de 1 a 10
+        $fileName = $this->faker->numberBetween(1, 10) . '.jpg';
 
         return [
-            'path'=> "img/products/{$fileName}",
+            'path' => "img/products/{$fileName}",
         ];
     }
 
@@ -29,7 +29,8 @@ class ImageFactory extends Factory
      */
     public function user() 
     {
-        $fileName = uniqid() . '.jpg';
+        // Usuarios: de 1P a 5P
+        $fileName = $this->faker->numberBetween(1, 5) . 'P.jpg';
 
         return $this->state([
             'path' => "img/users/{$fileName}",

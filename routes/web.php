@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductCartController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +24,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', [MainController::class, 'index'])->name('main');
 
 Route::resource('products', ProductController::class);
+Route::resource('products.carts', ProductCartController::class)->only(['store', 'destroy']);
+Route::resource('carts', CartController::class)->only(['index']);
 
 Auth::routes();
 
