@@ -31,13 +31,18 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('products.index') }}">{{ __('Products') }}</a>
+                            <a class="nav-link" href="{{ route('products.index') }}">
+                                Products
+                            </a>
                         </li>
                     </ul>
 
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('carts.index') }}">{{ __('Cart') }}</a>
+                            <a class="nav-link" href="{{ route('carts.index') }}">
+                                @inject('cartService', 'App\Services\CartService')
+                                Cart ({{ $cartService->countProducts() }})
+                            </a>
                         </li>
                     </ul>
 

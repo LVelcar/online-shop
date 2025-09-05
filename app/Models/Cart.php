@@ -17,4 +17,8 @@ class Cart extends Model
                     ->withPivot('quantity')
                     ->withTimestamps();
     }
+
+    public function getTotalAttribute() {
+        return $this->products->pluck('total')->sum();
+    }
 }

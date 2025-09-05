@@ -12,11 +12,8 @@
             <div class="row mb-3 container mt-3">
                 @foreach ($products as $product)
                     <div class="col-3 mb-3 mt-2">
-                        <div class="card">
+                        <div class="card h-100 d-flex flex-column mb-3 mt-2">
                             @include('components.product-card')
-                            <div class="details container mb-3 align-items-center">
-                                <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">View Details</a>
-                            </div>
                         </div>
                     </div>
                 @endforeach

@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Services\CartService;
+use App\Models\Cart;
 
 class ProductCartController extends Controller
 {
@@ -35,8 +36,16 @@ class ProductCartController extends Controller
             $cart->products()->attach($product->id, ['quantity' => 1]);
         }
 
-        // Guardar carrito en cookie por 7 días
-        $cookie = Cookie::make('cart', $cart->id, 7 * 24 * 60);
+        $cookie = $this->cartService->makeCookie($cart);
+
+        return redirect()->back()->withCookie($cookie);
+    }
+
+    public function destroy(Product $product, Cart $cart)
+    {
+        $cart->products()->detach($product->id);
+
+        $cookie = $this->cartService->makeCookie($cart);
 
         return redirect()->back()->withCookie($cookie);
     }
