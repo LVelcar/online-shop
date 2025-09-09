@@ -1,0 +1,33 @@
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.product-card-img {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.btn-blue {
+    background-color: #1e88e5;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.btn-blue:hover {
+    background-color: #1565c0;
+}
+
+.btn-red {
+    background-color: #e53935;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.btn-red:hover {
+    background-color: #b71c1c;
+}

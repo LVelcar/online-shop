@@ -16,7 +16,9 @@ return new class extends Migration
             $table->integer('quantity')->unsigned();
             $table->morphs('productable');
 
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products');
             $table->timestamps();
         });
     }

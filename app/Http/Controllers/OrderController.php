@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
 use App\Services\CartService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -14,13 +13,15 @@ class OrderController extends Controller
     public function __construct(CartService $cartService)
     {
         $this->cartService = $cartService;
+        $this->middleware('auth');
     }
 
+    // Mostrar la vista de confirmación de la orden
     public function create()
     {
         $cart = $this->cartService->getFromCookie();
 
-        if (!isset($cart) || $cart->products->isEmpty()) {
+        if (!$cart || $cart->products->isEmpty()) {
             return redirect()
                 ->back()
                 ->withErrors("Your cart is empty!");
@@ -31,9 +32,29 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(StoreOrderRequest $request)
+    // Crear la orden y redirigir al formulario de pago
+    public function store(Request $request)
     {
-        //
-    }
+        $user = $request->user();
 
+        $order = $user->orders()->create([
+            'status' => 'pending',
+        ]);
+
+        $cart = $this->cartService->getFromCookie();
+
+        $cartProductsWithQuantity = $cart
+            ->products
+            ->mapWithKeys(function ($product) {
+                return [
+                    $product->id => ['quantity' => $product->pivot->quantity]
+                ];
+            });
+
+        $order->products()->attach($cartProductsWithQuantity->toArray());
+
+        // Redirigimos al formulario de pago
+        return redirect()
+            ->route('orders.payments.create', ['order' => $order->id]);
+    }
 }
