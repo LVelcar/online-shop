@@ -4,60 +4,50 @@ namespace App\Providers;
 
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;   
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * This namespace is applied to your controller routes.
-     *
-     * In addition, it is set as the URL generator's root namespace.
+     * Namespace para tus controladores.
      *
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
 
     /**
-     * The path to the "home" route for your application.
+     * Ruta a la "home" de tu aplicación.
      *
      * @var string
      */
     public const HOME = '/';
 
     /**
-     * Define your route model bindings, pattern filters, etc.
-     *
-     * @return void
+     * Boot del provider.
      */
-    public function boot()
+    public function boot(): void
     {
         $this->configureRateLimiting();
+
+        parent::boot(); // importante para bindings y middleware alias
     }
 
     /**
-     * Define the routes for the application.
-     *
-     * @return void
+     * Mapear rutas de la aplicación.
      */
-    public function map()
+    public function map(): void
     {
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
-
-        //$this->mapPanelRoutes();
+        $this->mapPanelRoutes(); // ahora seguro con el Kernel
     }
 
     /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
+     * Rutas web.
      */
-    protected function mapWebRoutes()
+    protected function mapWebRoutes(): void
     {
         Route::middleware('web')
             ->namespace($this->namespace)
@@ -65,13 +55,9 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
-     * Define the "api" routes for the application.
-     *
-     * These routes are typically stateless.
-     *
-     * @return void
+     * Rutas API.
      */
-    protected function mapApiRoutes()
+    protected function mapApiRoutes(): void
     {
         Route::prefix('api')
             ->middleware('api')
@@ -79,26 +65,22 @@ class RouteServiceProvider extends ServiceProvider
             ->group(base_path('routes/api.php'));
     }
 
-
     /**
-     * Define the "admin panel" routes for the application.
-     *
-     * @return void
+     * Rutas del panel administrativo.
      */
-    protected function mapPanelRoutes()
+    protected function mapPanelRoutes(): void
     {
+        // Usamos el alias 'is.admin' que ya está registrado en Kernel
         Route::prefix('panel')
-            ->middleware(['web', 'auth', 'is.admin', 'verified'])
-            ->namespace("{$this->namespace}\Panel")
+            ->middleware(['web', 'auth', 'is.admin'])
+            ->namespace("{$this->namespace}\Panel") // o "{$this->namespace}\Panel" si quieres separar controladores
             ->group(base_path('routes/panel.php'));
     }
 
     /**
-     * Configure the rate limiters for the application.
-     *
-     * @return void
+     * Limites de rate para API.
      */
-    protected function configureRateLimiting()
+    protected function configureRateLimiting(): void
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60);

@@ -41,16 +41,10 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    protected $dates = [
-        'admin_since',
+     protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'admin_since' => 'datetime',
     ];
 
     public function orders()
@@ -65,4 +59,11 @@ class User extends Authenticatable
     public function image(){
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function isAdmin()
+    {
+        return $this->admin_since !== null 
+            && $this->admin_since->lessThanOrEqualTo(now());
+    }
+
 }

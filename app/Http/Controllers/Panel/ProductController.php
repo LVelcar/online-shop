@@ -1,19 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Panel;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function __construct()
-    {
-        // Solo los usuarios autenticados pueden crear, editar, eliminar
-        $this->middleware('auth')->except(['index', 'show']);
-    }
-
     /**
      * Mostrar todos los productos.
      */
