@@ -31,3 +31,58 @@
 .btn-red:hover {
     background-color: #b71c1c;
 }
+
+/* ===========================
+   Carousel destacado para Product Card
+   =========================== */
+
+/* Flechas del carousel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0, 123, 255, 0.8); /* Azul semitransparente */
+    border-radius: 50%; /* Flechas redondas */
+    padding: 10px; /* Más espacio para que resalten */
+    background-size: 100%, 100%;
+}
+
+/* Flecha izquierda */
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.5 0L4.5 1 7 4 4.5 7 5.5 8 9 4 5.5 0z'/%3E%3C/svg%3E");
+}
+
+/* Flecha derecha */
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.5 0L3.5 1 1 4 3.5 7 2.5 8 0 4 2.5 0z'/%3E%3C/svg%3E");
+}
+
+/* Indicadores (puntitos) */
+.carousel-indicators button {
+    background-color: rgba(0, 123, 255, 0.8); /* Azul semitransparente */
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    border: none;
+}
+
+/* Indicador activo */
+.carousel-indicators .active {
+    background-color: #007bff; /* Azul sólido */
+}
+
+/* Imagen con overlay ligero para resaltar flechas e indicadores */
+.carousel-item img {
+    filter: brightness(85%);
+    transition: filter 0.3s ease;
+}
+
+/* Al pasar el mouse sobre el carousel, aclarar imagen */
+.carousel:hover .carousel-item img {
+    filter: brightness(100%);
+}
+
+/* Opcional: sombra suave alrededor del carousel */
+.carousel {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}

@@ -10,6 +10,8 @@
             </div>
         @else
             <div class="row mb-3 container mt-3">
+                <!-- @dump($products) -->
+
                 @foreach ($products as $product)
                     <div class="col-3 mb-3 mt-2">
                         <div class="card h-100 d-flex flex-column mb-3 mt-2">
@@ -17,6 +19,9 @@
                         </div>
                     </div>
                 @endforeach
+
+                <!-- @dump($products)
+                @dump(\DB::getQueryLog()) -->
             </div>
         @endif
     </div>

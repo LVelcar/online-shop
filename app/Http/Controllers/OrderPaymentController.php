@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use Illuminate\Http\Request;
 use App\Services\CartService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderPaymentController extends Controller
 {
@@ -27,21 +28,25 @@ class OrderPaymentController extends Controller
     // Procesar el pago
     public function store(Request $request, Order $order)
     {
-        // Limpiar carrito
-        $this->cartService->getFromCookie()->products()->detach();
+        return DB::transaction(function () use ($order) {
 
-        // Crear registro de pago
-        $order->payment()->create([
-            'amount' => $order->total,
-            'payed_at' => now(),
-        ]);
+            // Limpiar carrito
+            $this->cartService->getFromCookie()->products()->detach();
 
-        // Actualizar estado de la orden
-        $order->status = 'payed';
-        $order->save();
+            // Crear registro de pago
+            $order->payment()->create([
+                'amount' => $order->total,
+                'payed_at' => now(),
+            ]);
 
-        return redirect()
-            ->route('main')
-            ->withSuccess('Your order has been successfully placed!');
+            // Actualizar estado de la orden
+            $order->status = 'payed';
+            $order->save();
+
+            return redirect()
+                ->route('main')
+                ->withSuccess('Your order has been successfully placed!');
+        }, 5);
     }
+
 }

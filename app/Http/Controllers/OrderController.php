@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -35,26 +36,29 @@ class OrderController extends Controller
     // Crear la orden y redirigir al formulario de pago
     public function store(Request $request)
     {
-        $user = $request->user();
+        return DB::transaction(function ()  use ($request) {
+        
+            $user = $request->user();
 
-        $order = $user->orders()->create([
-            'status' => 'pending',
-        ]);
+            $order = $user->orders()->create([
+                'status' => 'pending',
+            ]);
 
-        $cart = $this->cartService->getFromCookie();
+            $cart = $this->cartService->getFromCookie();
 
-        $cartProductsWithQuantity = $cart
-            ->products
-            ->mapWithKeys(function ($product) {
-                return [
-                    $product->id => ['quantity' => $product->pivot->quantity]
-                ];
-            });
+            $cartProductsWithQuantity = $cart
+                ->products
+                ->mapWithKeys(function ($product) {
+                    return [
+                        $product->id => ['quantity' => $product->pivot->quantity]
+                    ];
+                });
 
-        $order->products()->attach($cartProductsWithQuantity->toArray());
+            $order->products()->attach($cartProductsWithQuantity->toArray());
 
-        // Redirigimos al formulario de pago
-        return redirect()
-            ->route('orders.payments.create', ['order' => $order->id]);
+            // Redirigimos al formulario de pago
+            return redirect()
+                ->route('orders.payments.create', ['order' => $order->id]);
+        }, 5);
     }
 }

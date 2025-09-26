@@ -17,11 +17,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
 
-    /**
-     * Ruta a la "home" de tu aplicación.
-     *
-     * @var string
-     */
+    // Ruta a la que se redirige tras login "/"
+
     public const HOME = '/';
 
     /**

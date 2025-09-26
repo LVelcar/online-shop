@@ -6,7 +6,14 @@ use Illuminate\Support\Facades\Cookie;
 
 class CartService
 {
-    protected $cookieName = 'cart';
+    protected $cookieName;
+    protected $cookieExpiration;
+    
+    public function __construct()
+    {
+        $this->cookieName = config('cart.cookie.name', 'cart_cookie');
+        $this->cookieExpiration = config('cart.cookie.expiration', 7 * 24 * 60);
+    }
 
     public function getFromCookie() 
     {

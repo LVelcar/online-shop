@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Requests\ProductRequest;
-use App\Models\Product;
+use App\Models\PanelProduct;
 use App\Http\Controllers\Controller;
+use App\Scopes\AvailableScope;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,10 +15,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // Incluye productos soft deleted si es necesario con withTrashed()
-        $products = Product::all();
-
-        return view('products.index', compact('products'));
+        /** // Incluye productos soft deleted si es necesario con withTrashed()
+        * $products = Product::all();
+        *
+        * return view('products.index', compact('products'));
+        */
+        return view('products.index')->with([
+            'products' => PanelProduct::without('images')->get(),
+        ]);
     }
 
     /**
@@ -33,7 +38,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $product = Product::create($request->validated());
+        $product = PanelProduct::create($request->validated());
 
         return redirect()
             ->route('products.index') // ruta correcta
@@ -43,7 +48,7 @@ class ProductController extends Controller
     /**
      * Mostrar un producto específico.
      */
-    public function show(Product $product)
+    public function show(PanelProduct $product)
     {
         return view('products.show', compact('product'));
     }
@@ -51,7 +56,7 @@ class ProductController extends Controller
     /**
      * Mostrar formulario para editar producto.
      */
-    public function edit(Product $product)
+    public function edit(PanelProduct $product)
     {
         return view('products.edit', compact('product'));
     }
@@ -59,7 +64,7 @@ class ProductController extends Controller
     /**
      * Actualizar un producto.
      */
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, PanelProduct $product)
     {
         $product->update($request->validated());
 
@@ -71,7 +76,7 @@ class ProductController extends Controller
     /**
      * Eliminar un producto (soft delete) y desvincular relaciones.
      */
-    public function destroy(Product $product)
+    public function destroy(PanelProduct $product)
     {
         // Desvincular de carritos y pedidos para evitar problemas
         $product->carts()->detach();

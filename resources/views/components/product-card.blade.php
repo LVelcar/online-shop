@@ -6,13 +6,30 @@
 <div class="product-card card h-100 flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
     {{-- Imagen del producto --}}
     @if ($product->images->isNotEmpty())
-        <img class="product-card-img w-full h-72 object-cover"
-             src="{{ asset($product->images->first()->path) }}"
-             alt="{{ $product->title }}">
+    <div id="carousel{{ $product->id }}" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @foreach ($product->images as $image)
+                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                    <img class="d-block w-100 card-img-top"
+                         src="{{ asset($image->path) }}"
+                         alt="{{ $product->title }}">
+                </div>
+            @endforeach
+        </div>
+        <a class="carousel-control-prev" href="#carousel{{ $product->id }}" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carousel{{ $product->id }}" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </a>
+    </div>
+    
     @else
         <img class="product-card-img w-full h-72 object-cover"
-             src="{{ asset('img/products/default.jpg') }}"
-             alt="Sin imagen">
+            src="{{ asset('img/products/default.jpg') }}"
+            alt="Sin imagen">
     @endif
 
     <div class="p-4 flex flex-col flex-grow">
