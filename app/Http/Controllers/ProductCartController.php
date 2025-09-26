@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 use App\Services\CartService;
 use App\Models\Cart;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\ValidationException;
+
 
 class ProductCartController extends Controller
 {
@@ -19,15 +21,23 @@ class ProductCartController extends Controller
 
     public function store(Request $request, Product $product)
     {
-        // Obtener carrito desde el servicio
+        // Get cart from cookie or create new one
         $cart = $this->cartService->getFromCookieOrCreate();
 
-        // Verificar si el producto ya está en el carrito
+        // View existing quantity in cart
         $existingQuantity = $cart->products()
             ->where('product_id', $product->id)
             ->first()?->pivot?->quantity ?? 0;
 
-        // Attach o actualizar pivot
+        // Validate stock
+        if ($product->stock < $existingQuantity + 1) {
+            throw ValidationException::withMessages([
+                'product' => "There is not enough stock for the quantity you required of 
+                {$product->title}",
+            ]);
+        }
+
+        // Attach or update pivot table
         if ($existingQuantity > 0) {
             $cart->products()->updateExistingPivot($product->id, [
                 'quantity' => $existingQuantity + 1,
