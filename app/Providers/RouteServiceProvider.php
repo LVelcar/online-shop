@@ -68,8 +68,10 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapPanelRoutes(): void
     {
         // Usamos el alias 'is.admin' que ya está registrado en Kernel
+
+        
         Route::prefix('panel')
-            ->middleware(['web', 'auth', 'is.admin'])
+            ->middleware(['web', 'auth', 'is.admin', 'verified'])
             ->namespace("{$this->namespace}\Panel") // o "{$this->namespace}\Panel" si quieres separar controladores
             ->group(base_path('routes/panel.php'));
     }

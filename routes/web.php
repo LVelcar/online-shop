@@ -19,13 +19,23 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [MainController::class, 'index'])->name('main');
+Route::get('/', [MainController::class, 'index'])
+    ->name('main');
 
-Route::resource('products.carts', ProductCartController::class)->only(['store', 'destroy']);
-Route::resource('carts', CartController::class)->only(['index']);
-Route::resource('orders', OrderController::class)->only(['create', 'store']);
-Route::resource('orders.payments', OrderPaymentController::class)->only(['create', 'store']);
+Route::resource('products.carts', ProductCartController::class)
+    ->only(['store', 'destroy']);
+Route::resource('carts', CartController::class)
+    ->only(['index']);
+Route::resource('orders', OrderController::class)
+    ->only(['create', 'store'])
+    ->middleware(['verified']);
+Route::resource('orders.payments', OrderPaymentController::class)
+    ->only(['create', 'store'])
+    ->middleware(['verified']);
 
-Auth::routes();
+Auth::routes([
+    'verify' => true, // Enable email verification routes
+    // 'reset' => false, // Enable password reset routes
+]);
 
 // Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
