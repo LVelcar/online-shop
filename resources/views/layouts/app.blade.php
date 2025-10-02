@@ -68,6 +68,8 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <img src="{{ asset(Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }}" class="rounded-circle " width="20" height="20">
+                                    <span class="caret"></span>
                                     {{ Auth::user()->name }}
                                 </a>
 

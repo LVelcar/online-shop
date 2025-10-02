@@ -70,4 +70,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->attributes['password'] = bcrypt($password);
     }
+
+    public function getProfileImageAttribute()
+    {
+        return $this->image ? "images/{$this->image->path}"
+        : 'https://www.gravatar.com/avatar/404?d=mp';
+    }
 }
