@@ -7,6 +7,7 @@ use App\Models\PanelProduct;
 use App\Http\Controllers\Controller;
 use App\Scopes\AvailableScope;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -40,6 +41,12 @@ class ProductController extends Controller
     {
         $product = PanelProduct::create($request->validated());
 
+        foreach ($request->images as $image) {
+            $product->images()->create([
+                'path' => 'images/' . $image->store('products', 'images'),
+            ]);
+        }
+
         return redirect()
             ->route('products.index') // ruta correcta
             ->withSuccess("Product with ID {$product->id} created successfully");
@@ -67,6 +74,24 @@ class ProductController extends Controller
     public function update(ProductRequest $request, PanelProduct $product)
     {
         $product->update($request->validated());
+
+        if ($request->hasFile('images')) {
+            foreach ($product->images as $image) {
+               $path = storage_path("app/public/{$image->path}");
+
+               File::delete($path);
+
+                $image->delete();
+            }
+
+            foreach ($request->images as $image) {
+                $product->images()->create([
+                    'path' => 'images/' . $image->store('products', 'images'),
+                ]);
+            }
+        }
+
+         
 
         return redirect()
             ->route('products.index')

@@ -30,6 +30,20 @@
                     <option {{ old('status') == 'unavailable' ? 'selected' : ($product->status == 'unavailable' ? 'selected' : '') }} value="unavailable">Unavailable</option>
                 </select>
             </div>
+
+            <div class="form-row">
+                <label for="">
+                    {{ __('Images') }}
+                </label>
+
+                <div class="custom-file">
+                    <input type="file" accept="image/*" name="images[]" class="custom-file-input" multiple>
+                    <label class="custom-file-label">
+                        Product images
+                    </label>
+                </div>
+            </div>
+
             <div class="form-row mt-2">
                 <button type="submit" class="btn btn-primary btn-lg">Edit product</button>
             </div>

@@ -31,6 +31,19 @@
                 </select>
             </div>
             <div class="form-row">
+                <label for="">
+                    {{ __('Images') }}
+                </label>
+
+                <div class="custom-file">
+                    <input type="file" accept="image/*" name="images[]" class="custom-file-input" multiple>
+                    <label class="custom-file-label">
+                        Product images
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
                 <button type="submit" class="btn btn-primary btn-lg">Create product</button>
             </div>
         </form>
